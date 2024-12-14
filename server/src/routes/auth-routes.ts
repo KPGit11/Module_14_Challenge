@@ -1,9 +1,9 @@
-import { Router, Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
 import { User } from '../models/user.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response): Promise<Response> => {
   const { username, password } = req.body;
 
   try {
@@ -25,12 +25,13 @@ export const login = async (req: Request, res: Response) => {
       { expiresIn: '2h' }
     );
 
-    res.json({ token });
+    return res.json({ token });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error' });
   }
 };
 
 const router = Router();
 router.post('/login', login);
+
 export default router;
